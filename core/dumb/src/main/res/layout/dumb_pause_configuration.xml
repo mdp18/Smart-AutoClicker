@@ -1,0 +1,16 @@
+<!-- ...existing code... -->
+<CheckBox
+    android:id="@+id/is_randomized_checkbox"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Randomize Pause Duration"
+    android:checked="true" />
+
+<EditText
+    android:id="@+id/fixed_pause_duration_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Fixed Pause Duration (ms)"
+    android:inputType="number"
+    android:visibility="gone" />
+<!-- ...existing code... -->

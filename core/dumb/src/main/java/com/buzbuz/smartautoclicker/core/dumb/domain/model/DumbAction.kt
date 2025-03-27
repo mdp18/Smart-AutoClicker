@@ -19,6 +19,7 @@ package com.buzbuz.smartautoclicker.core.dumb.domain.model
 import android.graphics.Point
 import com.buzbuz.smartautoclicker.core.base.interfaces.Identifiable
 import com.buzbuz.smartautoclicker.core.base.identifier.Identifier
+import kotlin.random.Random
 
 sealed class DumbAction : Identifiable {
 
@@ -75,9 +76,20 @@ sealed class DumbAction : Identifiable {
         override val scenarioId: Identifier,
         override val name: String,
         override val priority: Int = 0,
-        val pauseDurationMs: Long,
+        val minPauseDurationMs: Long,
+        val maxPauseDurationMs: Long,
+        val isRandomized: Boolean = true, // New property to enable/disable randomization
+        val fixedPauseDurationMs: Long = 0, // New property for fixed duration when randomization is disabled
     ) : DumbAction() {
 
-        override fun isValid(): Boolean = name.isNotEmpty()
+        val effectivePauseDurationMs: Long
+            get() = if (isRandomized) Random.nextLong(minPauseDurationMs, maxPauseDurationMs + 1)
+                    else fixedPauseDurationMs
+
+        override fun isValid(): Boolean =
+            name.isNotEmpty() &&
+            minPauseDurationMs >= 0 &&
+            maxPauseDurationMs >= minPauseDurationMs &&
+            (!isRandomized || fixedPauseDurationMs >= 0) // Validate fixed duration if randomization is disabled
     }
 }
